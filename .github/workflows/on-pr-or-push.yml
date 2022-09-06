@@ -21,18 +21,22 @@ jobs:
         with:
           path: ~/.npm
           key: node_modules-${{ hashFiles('**/package-lock.json') }}
-      - run: npm ci && npm test
-
-  chromatic-deployment:
-    needs: install
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        run: npm ci
 
       - name: test
         run: npm test
+
+#  chromatic-deployment:
+#    needs: install
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v2
+#
+#      - uses: actions/cache@v2
+#        with:
+#          path: ~/.npm
+#          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+#
+#      - name: test
+#        run: npm test
