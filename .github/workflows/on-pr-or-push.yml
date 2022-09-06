@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install Dependencies
-        run: cd .. && npm i
+        run: cd .. && ls
 
   run-tests:
     runs-on: ubuntu-latest
