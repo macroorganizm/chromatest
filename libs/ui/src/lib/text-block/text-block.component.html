@@ -1,0 +1,11 @@
+<div class="text-block-container" [ngClass]="{
+          'text-block-container--bordered': bordered
+        }">
+  <ng-content select="[text-block-header]"></ng-content>
+  <div class="text-block-body">
+    <div class="text-block-main">
+      <ng-content></ng-content>
+    </div>
+  </div>
+  <ng-content select="[text-block-footer]"></ng-content>
+</div>

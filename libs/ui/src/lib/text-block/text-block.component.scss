@@ -1,0 +1,21 @@
+.text-block-container {
+  display: block;
+  position: relative;
+  background: lightblue;
+  border-radius: 4px;
+  box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+
+}
+
+.text-block-main {
+  padding: 0 12px 0 12px;
+}
+
+.text-block-container--bordered {
+  border: 2px solid blue;
+}
+
+.text-block-footer {
+  color: blue;
+}

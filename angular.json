@@ -3,6 +3,7 @@
   "version": 2,
   "projects": {
     "olchromatic": "apps/olchromatic",
-    "olchromatic-e2e": "apps/olchromatic-e2e"
+    "olchromatic-e2e": "apps/olchromatic-e2e",
+    "ui": "libs/ui"
   }
 }
