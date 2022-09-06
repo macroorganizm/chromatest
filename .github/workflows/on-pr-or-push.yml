@@ -21,7 +21,7 @@ jobs:
         with:
           path: ~/.npm
           key: node_modules-${{ hashFiles('**/package-lock.json') }}
-      - run: npm ci
+      - run: npm ci && npm test
 
   chromatic-deployment:
     needs: install
@@ -35,5 +35,4 @@ jobs:
           key: node_modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: test
-        run: |
-          npm test
+        run: npm test
