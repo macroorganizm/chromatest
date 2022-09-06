@@ -4,12 +4,10 @@
   "license": "MIT",
   "scripts": {
     "ng": "nx",
-    "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2020 browser module main",
     "start": "nx serve",
     "build": "nx build",
     "test": "nx test",
-    "build-storybook": "nx run ui:build-storybook",
-    "chromatic": "npx chromatic --project-token=bcc01ab231cf"
+    "build-storybook": "nx run ui:build-storybook"
   },
   "private": true,
   "dependencies": {
@@ -65,7 +63,6 @@
     "typescript": "~4.7.2",
     "webpack": "^5.64.0"
   },
-  "main": "decorate-angular-cli.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/macroorganizm/chromatest.git"
