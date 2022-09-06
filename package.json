@@ -65,6 +65,15 @@
     "typescript": "~4.7.2",
     "webpack": "^5.64.0"
   },
-  "readme": "ERROR: No README data found!",
-  "_id": "olchromatic@0.0.0"
+  "main": "decorate-angular-cli.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/macroorganizm/chromatest.git"
+  },
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/macroorganizm/chromatest/issues"
+  },
+  "homepage": "https://github.com/macroorganizm/chromatest#readme",
+  "description": ""
 }
