@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install Dependencies
-        run: cd .. && ls
+        run: ls
 
   run-tests:
     runs-on: ubuntu-latest
