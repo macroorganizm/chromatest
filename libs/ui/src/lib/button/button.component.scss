@@ -1,8 +1,15 @@
 button {
   background-color: rgba(51, 51, 51, 0.05);
-  border: 1px blue solid;
+  border: 1px solid;
   margin-top: 10px;
   border-radius: 8px;
-  border-width: 1px;
   padding: 6px 10px;
+}
+
+.border-red {
+  border-color: red;
+}
+
+.border-blue {
+  border-color: blue;
 }

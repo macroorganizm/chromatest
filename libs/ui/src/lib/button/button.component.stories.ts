@@ -18,4 +18,5 @@ const Template: Story<ButtonComponent> = (args: ButtonComponent) => ({
 export const Primary = Template.bind({});
 Primary.args = {
   text: 'button label',
+  isRed: true,
 };

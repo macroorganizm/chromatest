@@ -31,5 +31,5 @@ const Template: Story<TextBlockComponent> = (args: TextBlockComponent) => ({
 
 export const Primary = Template.bind({});
 Primary.args = {
-  bordered: false,
+  bordered: true,
 };
