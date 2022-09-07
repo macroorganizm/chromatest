@@ -85,4 +85,4 @@ jobs:
           key: node_modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: check-storybook
-        run: npx chromatic --project-token=${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+        run: npm run chromatic -- --project-token=${{ secrets.CHROMATIC_PROJECT_TOKEN }}
