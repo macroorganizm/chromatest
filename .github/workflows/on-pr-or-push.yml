@@ -56,3 +56,17 @@ jobs:
 
       - name: build
         run: npm run build
+
+  check-storybook:
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/cache@v3
+        with:
+          path: ${{ env.CACHE_NODE_MODULES_PATH }}
+          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+
+      - name: check-storybook
+        run: npm run build-storybook
