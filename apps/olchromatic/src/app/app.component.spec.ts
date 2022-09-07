@@ -15,6 +15,10 @@ describe('AppComponent', () => {
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
   });
+
+
+
+
   //
   // it(`should have as title 'olchromatic'`, () => {
   //   const fixture = TestBed.createComponent(AppComponent);
