@@ -18,7 +18,7 @@ const Template: Story<TextBlockComponent> = (args: TextBlockComponent) => ({
         <h2>Some header</h2>
       </div>
       <p style="color: blue">Content Start</p>
-      <p>orem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+      <p>orem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</p>
       <p>orem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
       <p style="color: blue">Content end</p>
       <div text-block-footer>
