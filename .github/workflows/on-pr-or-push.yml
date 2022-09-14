@@ -85,8 +85,15 @@ jobs:
           key: node_modules-${{ hashFiles('**/package-lock.json') }}
 
       - uses: chromaui/action@v1
+        if: github.ref != 'refs/heads/main'
         # Options required to the GitHub chromatic action
         with:
           # 👇 Chromatic projectToken, refer to the manage page to obtain it.
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           exitZeroOnChanges: true # 👈 Option to prevent the workflow from failing
+
+      - uses: chromaui/action@v1
+        if: github.ref == 'refs/heads/main'
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          autoAcceptChanges: true
