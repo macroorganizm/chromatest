@@ -97,12 +97,9 @@ jobs:
         with:
           name: ${{ env.RUN_UNIQUE_ID }}_storybook_cache
           path: dist/storybook/ui
-#
-#      - name: Display structure of downloaded files
-#        run: ls -R
 
       - uses: chromaui/action@v1
-        if: github.ref != 'refs/heads/main'
+        if: github.event_name == 'pull_request'
         # Options required to the GitHub chromatic action
         with:
           # 👇 Chromatic projectToken, refer to the manage page to obtain it.
@@ -111,7 +108,7 @@ jobs:
           storybookBuildDir: dist/storybook/ui
 
       - uses: chromaui/action@v1
-        if: github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           autoAcceptChanges: true
