@@ -97,21 +97,21 @@ jobs:
         with:
           name: ${{ env.RUN_UNIQUE_ID }}_storybook_cache
           path: dist/storybook/ui
-
-      - name: Display structure of downloaded files
-        run: ls -R
-
-#      - uses: chromaui/action@v1
-#        if: github.ref != 'refs/heads/main'
-#        # Options required to the GitHub chromatic action
-#        with:
-#          # 👇 Chromatic projectToken, refer to the manage page to obtain it.
-#          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-#          exitZeroOnChanges: true # 👈 Option to prevent the workflow from failing
-#          storybookBuildDir: dist/storybook/ui
 #
-#      - uses: chromaui/action@v1
-#        if: github.ref == 'refs/heads/main'
-#        with:
-#          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-#          autoAcceptChanges: true
+#      - name: Display structure of downloaded files
+#        run: ls -R
+
+      - uses: chromaui/action@v1
+        if: github.ref != 'refs/heads/main'
+        # Options required to the GitHub chromatic action
+        with:
+          # 👇 Chromatic projectToken, refer to the manage page to obtain it.
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          exitZeroOnChanges: true # 👈 Option to prevent the workflow from failing
+          storybookBuildDir: dist/storybook/ui
+
+      - uses: chromaui/action@v1
+        if: github.ref == 'refs/heads/main'
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          autoAcceptChanges: true
