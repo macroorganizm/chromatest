@@ -29,35 +29,35 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-  test:
-    needs: install
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0 # Required to retrieve git history
-
-      - uses: actions/cache@v3
-        with:
-          path: ${{ env.CACHE_NODE_MODULES_PATH }}
-          key: node_modules-${{ hashFiles('**/package-lock.json') }}
-
-      - name: test
-        run: npm test
-
-  build:
-    needs: install
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: actions/cache@v3
-        with:
-          path: ${{ env.CACHE_NODE_MODULES_PATH }}
-          key: node_modules-${{ hashFiles('**/package-lock.json') }}
-
-      - name: build
-        run: npm run build
+#  test:
+#    needs: install
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#        with:
+#          fetch-depth: 0 # Required to retrieve git history
+#
+#      - uses: actions/cache@v3
+#        with:
+#          path: ${{ env.CACHE_NODE_MODULES_PATH }}
+#          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+#
+#      - name: test
+#        run: npm test
+#
+#  build:
+#    needs: install
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#
+#      - uses: actions/cache@v3
+#        with:
+#          path: ${{ env.CACHE_NODE_MODULES_PATH }}
+#          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+#
+#      - name: build
+#        run: npm run build
 
   check-storybook:
     needs: install
@@ -96,18 +96,23 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: ${{ env.RUN_UNIQUE_ID }}_storybook_cache
+          path: dist/storybook/ui
 
-      - uses: chromaui/action@v1
-        if: github.ref != 'refs/heads/main'
-        # Options required to the GitHub chromatic action
-        with:
-          # 👇 Chromatic projectToken, refer to the manage page to obtain it.
-          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          exitZeroOnChanges: true # 👈 Option to prevent the workflow from failing
-          storybookBuildDir: dist/storybook/ui
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: path/to/artifact
 
-      - uses: chromaui/action@v1
-        if: github.ref == 'refs/heads/main'
-        with:
-          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          autoAcceptChanges: true
+#      - uses: chromaui/action@v1
+#        if: github.ref != 'refs/heads/main'
+#        # Options required to the GitHub chromatic action
+#        with:
+#          # 👇 Chromatic projectToken, refer to the manage page to obtain it.
+#          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+#          exitZeroOnChanges: true # 👈 Option to prevent the workflow from failing
+#          storybookBuildDir: dist/storybook/ui
+#
+#      - uses: chromaui/action@v1
+#        if: github.ref == 'refs/heads/main'
+#        with:
+#          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+#          autoAcceptChanges: true
