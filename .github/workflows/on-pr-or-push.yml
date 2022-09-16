@@ -100,7 +100,6 @@ jobs:
 
       - name: Display structure of downloaded files
         run: ls -R
-        working-directory: path/to/artifact
 
 #      - uses: chromaui/action@v1
 #        if: github.ref != 'refs/heads/main'
