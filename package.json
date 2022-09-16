@@ -8,8 +8,7 @@
     "start": "nx serve",
     "build": "nx build",
     "test": "nx test",
-    "build-storybook": "nx run ui:build-storybook",
-    "chromatic": "npm run build-storybook && npx chromatic --storybook-build-dir=dist/storybook/ui"
+    "build-storybook": "nx run ui:build-storybook"
   },
   "private": true,
   "dependencies": {
