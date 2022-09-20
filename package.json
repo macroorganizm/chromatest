@@ -9,7 +9,7 @@
     "build": "nx build",
     "test": "nx test",
     "build-storybook": "nx run ui:build-storybook --webpack-stats-json",
-    "chromatic": "npm run build-storybook && npx chromatic --storybook-build-dir=dist/storybook/ui"
+    "chromatic": "npm run build-storybook && npx chromatic --storybook-build-dir=dist/storybook/ui --only-changed"
   },
   "private": true,
   "dependencies": {
