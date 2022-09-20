@@ -72,12 +72,12 @@ jobs:
 
       - name: check-storybook
         run: npm run build-storybook
-      - name: Cache storybook
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ env.RUN_UNIQUE_ID }}_storybook_cache
-          path: dist/storybook/ui
-          retention-days: 1
+#      - name: Cache storybook
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: ${{ env.RUN_UNIQUE_ID }}_storybook_cache
+#          path: dist/storybook/ui
+#          retention-days: 1
 
   check-chromatic:
     needs: [install, check-storybook]
@@ -92,11 +92,11 @@ jobs:
           path: ${{ env.CACHE_NODE_MODULES_PATH }}
           key: node_modules-${{ hashFiles('**/package-lock.json') }}
 
-      - name: Get cached storybook
-        uses: actions/download-artifact@v3
-        with:
-          name: ${{ env.RUN_UNIQUE_ID }}_storybook_cache
-          path: dist/storybook/ui
+#      - name: Get cached storybook
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: ${{ env.RUN_UNIQUE_ID }}_storybook_cache
+#          path: dist/storybook/ui
 
       - uses: chromaui/action@v1
         if: github.event_name == 'pull_request'
