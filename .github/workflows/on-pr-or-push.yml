@@ -92,17 +92,18 @@ jobs:
           path: ${{ env.CACHE_NODE_MODULES_PATH }}
           key: node_modules-${{ hashFiles('**/package-lock.json') }}
 
-      - uses: chromaui/action@v1
-        if: github.ref != 'refs/heads/main'
-        # Options required to the GitHub chromatic action
-        with:
-          # 👇 Chromatic projectToken, refer to the manage page to obtain it.
-          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          exitZeroOnChanges: true # 👈 Option to prevent the workflow from failing
-          onlyChanged: true
+      - run: npm run build-storybook
 
       - uses: chromaui/action@v1
-        if: github.ref == 'refs/heads/main'
+        if: github.ref != 'refs/heads/master'
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          autoAcceptChanges: true
+          exitZeroOnChanges: true # Option to prevent the workflow from failing and request changes reviews
+          storybookBuildDir: dist/storybook/ui
+
+      - uses: chromaui/action@v1
+        if: github.ref == 'refs/heads/master'
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          autoAcceptChanges: true # Automatically accepting changes which are merged to the master branch
+          storybookBuildDir: dist/storybook/ui
