@@ -59,19 +59,19 @@ jobs:
 #      - name: build
 #        run: npm run build
 
-  check-storybook:
-    needs: install
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: actions/cache@v3
-        with:
-          path: ${{ env.CACHE_NODE_MODULES_PATH }}
-          key: node_modules-${{ hashFiles('**/package-lock.json') }}
-
-      - name: check-storybook
-        run: npm run build-storybook
+#  check-storybook:
+#    needs: install
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#
+#      - uses: actions/cache@v3
+#        with:
+#          path: ${{ env.CACHE_NODE_MODULES_PATH }}
+#          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+#
+#      - name: check-storybook
+#        run: npm run build-storybook
 #      - name: Cache storybook
 #        uses: actions/upload-artifact@v3
 #        with:
@@ -80,7 +80,7 @@ jobs:
 #          retention-days: 1
 
   check-chromatic:
-    needs: [install, check-storybook]
+    needs: install
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -92,24 +92,16 @@ jobs:
           path: ${{ env.CACHE_NODE_MODULES_PATH }}
           key: node_modules-${{ hashFiles('**/package-lock.json') }}
 
-#      - name: Get cached storybook
-#        uses: actions/download-artifact@v3
-#        with:
-#          name: ${{ env.RUN_UNIQUE_ID }}_storybook_cache
-#          path: dist/storybook/ui
-
       - uses: chromaui/action@v1
-        if: github.event_name == 'pull_request'
+        if: github.ref != 'refs/heads/main'
         # Options required to the GitHub chromatic action
         with:
           # 👇 Chromatic projectToken, refer to the manage page to obtain it.
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           exitZeroOnChanges: true # 👈 Option to prevent the workflow from failing
-          storybookBuildDir: dist/storybook/ui
-          onlyChanged: true
 
       - uses: chromaui/action@v1
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main'
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           autoAcceptChanges: true
