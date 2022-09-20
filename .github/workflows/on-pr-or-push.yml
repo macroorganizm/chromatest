@@ -100,6 +100,7 @@ jobs:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           exitZeroOnChanges: true # Option to prevent the workflow from failing and request changes reviews
           storybookBuildDir: dist/storybook/ui
+          onlyChanged: true
 
       - uses: chromaui/action@v1
         if: github.ref == 'refs/heads/master'
