@@ -1,0 +1,25 @@
+{
+  "projectType": "library",
+  "sourceRoot": "libs/ch-uilib/text-block/src",
+  "prefix": "olchromatic",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/ch-uilib/text-block"],
+      "options": {
+        "jestConfig": "libs/ch-uilib/text-block/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/ch-uilib/text-block/**/*.ts",
+          "libs/ch-uilib/text-block/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}
