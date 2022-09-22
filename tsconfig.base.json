@@ -15,6 +15,12 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@olchromatic/ch-uilib/button-new": [
+        "libs/ch-uilib/button-new/src/index.ts"
+      ],
+      "@olchromatic/ch-uilib/text-block": [
+        "libs/ch-uilib/text-block/src/index.ts"
+      ],
       "@olchromatic/ui": ["libs/ui/src/index.ts"]
     }
   },
