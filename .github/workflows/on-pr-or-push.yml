@@ -99,17 +99,16 @@ jobs:
 
       - run: npm run ${{ needs.install.outputs.encore-changed }}
 
-      - name: Chromatic 111
+      - uses: chromaui/action@v1
         if: github.ref != 'refs/heads/main'
-        run: npx chromatic -- --project-token ${{ secrets.CHROMATIC_PROJECT_TOKEN }} --exit-zero-on-changes --storybook-build-dir dist/storybook/ui
-#        with:
-#          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-#          exitZeroOnChanges: true # Option to prevent the workflow from failing and request changes reviews
-#          storybookBuildDir: dist/storybook/ui
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          exitZeroOnChanges: true # Option to prevent the workflow from failing and request changes reviews
+          storybookBuildDir: dist/storybook/ui
 
-#      - uses: chromaui/action@v1
-#        if: github.ref == 'refs/heads/main'
-#        with:
-#          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-#          autoAcceptChanges: true # Automatically accepting changes which are merged to the master branch
-#          storybookBuildDir: dist/storybook/ui
+      - uses: chromaui/action@v1
+        if: github.ref == 'refs/heads/main'
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          autoAcceptChanges: true # Automatically accepting changes which are merged to the master branch
+          storybookBuildDir: dist/storybook/ui

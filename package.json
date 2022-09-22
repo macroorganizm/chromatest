@@ -8,7 +8,7 @@
     "start": "nx serve",
     "build": "nx build",
     "test": "nx test",
-    "build-storybook": "nx run ui:build-storybook --webpack-stats-json"
+    "build-storybook": "nx run ui:build-storybook"
   },
   "private": true,
   "dependencies": {
