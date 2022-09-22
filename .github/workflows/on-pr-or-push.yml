@@ -95,14 +95,14 @@ jobs:
       - run: npm run build-storybook
 
       - uses: chromaui/action@v1
-        if: github.ref != 'refs/heads/master'
+        if: github.ref != 'refs/heads/main'
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           exitZeroOnChanges: true # Option to prevent the workflow from failing and request changes reviews
           storybookBuildDir: dist/storybook/ui
 
       - uses: chromaui/action@v1
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/main'
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           autoAcceptChanges: true # Automatically accepting changes which are merged to the master branch
