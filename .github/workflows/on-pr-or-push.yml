@@ -15,7 +15,9 @@ env:
 jobs:
   install:
     runs-on: ubuntu-latest
-
+    outputs:
+      # Pre-determine if apps are affected so that the corresponding jobs are not called at all unnecessarily
+      encore-changed: ${{ steps.encore-changed.outputs.encore-changed }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -28,6 +30,9 @@ jobs:
           key: node_modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
         run: npm ci
+      - name: Check changes "encore"
+        id: encore-changed
+        run: echo "::set-output name=encore-changed::$(node scripts/ci-is-affected.mjs --appName=encore --base=${{ env.BASE_REF}} --head=HEAD)"
 
 #  test:
 #    needs: install
@@ -92,7 +97,7 @@ jobs:
           path: ${{ env.CACHE_NODE_MODULES_PATH }}
           key: node_modules-${{ hashFiles('**/package-lock.json') }}
 
-      - run: npm run build-storybook
+      - run: npm run ${{ needs.install.outputs.encore-changed }}
 
       - uses: chromaui/action@v1
         if: github.ref != 'refs/heads/master'
