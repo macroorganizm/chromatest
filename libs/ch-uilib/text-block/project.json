@@ -19,6 +19,10 @@
           "libs/ch-uilib/text-block/**/*.html"
         ]
       }
+    },
+    "storybook-mark": {
+      "executor": "nx:noop",
+      "options": {}
     }
   },
   "tags": []

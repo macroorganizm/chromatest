@@ -19,6 +19,10 @@
           "libs/ch-uilib/button-new/**/*.html"
         ]
       }
+    },
+    "storybook-mark": {
+      "executor": "nx:noop",
+      "options": {}
     }
   },
   "tags": []
