@@ -15,7 +15,8 @@ env:
 jobs:
   install:
     runs-on: ubuntu-latest
-
+    outputs:
+      storybooks-related-lib-changed: ${{ steps.storybooks-related-lib-changed.outputs.storybooks-related-lib-changed }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -28,6 +29,9 @@ jobs:
           key: node_modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
         run: npm ci
+      - name: Check changes "storybook-covered"
+        id: storybooks-related-lib-changed
+        run: echo "::set-output name=storybooks-related-lib-changed::$(node scripts/ci-is-affected.mjs --base=main --head=HEAD --target=storybook-mark)"
 
 #  test:
 #    needs: install
@@ -81,6 +85,7 @@ jobs:
 
   check-chromatic:
     needs: install
+    if: ${{ needs.install.outputs.storybooks-related-lib-changed == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
