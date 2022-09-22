@@ -6,9 +6,7 @@ module.exports = {
   core: { ...rootMain.core, builder: 'webpack5' },
 
   stories: [
-    ...rootMain.stories,
-    '../**/*.stories.mdx',
-    '../**/*.stories.@(js|jsx|ts|tsx)',
+    '../**/button/**/*.stories.@(js|jsx|ts|tsx)',
   ],
   addons: [...rootMain.addons],
   webpackFinal: async (config, { configType }) => {
