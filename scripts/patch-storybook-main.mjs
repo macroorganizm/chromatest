@@ -1,4 +1,5 @@
 import { execSync } from 'child_process';
+import yargs from 'yargs';
 import path from "path";
 import fs from "fs";
 import {fileURLToPath} from "url";
@@ -6,7 +7,10 @@ import {fileURLToPath} from "url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 (function () {
-  const stringOutput = execSync('npx nx print-affected --target=storybook-mark --select=tasks.target.project').toString();
+  let { base, head } = yargs(process.argv).argv;
+  base = base || 'origin/main';
+  head = head || 'HEAD';
+  const stringOutput = execSync(`npx nx print-affected --base=${base} --head=${head} --target=storybook-mark --select=tasks.target.project`).toString();
 
   const affectedLibsNames = stringOutput.split(',').map((p) => p.trim());
   const fd = fs.readFileSync(path.join(__dirname, '../angular.json')).toString();

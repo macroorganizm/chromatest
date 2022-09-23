@@ -99,7 +99,7 @@ jobs:
           path: ${{ env.CACHE_NODE_MODULES_PATH }}
           key: node_modules-${{ hashFiles('**/package-lock.json') }}
 
-      - run: npm run patch-storybook-affected
+      - run: node scripts/patch-storybook-main.mjs --base=${{env.BASE_REF}} --head=HEAD
 
       - run: npm run build-storybook
 
