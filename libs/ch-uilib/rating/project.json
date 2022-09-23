@@ -1,0 +1,29 @@
+{
+  "projectType": "library",
+  "sourceRoot": "libs/ch-uilib/rating/src",
+  "prefix": "olchromatic",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/ch-uilib/rating"],
+      "options": {
+        "jestConfig": "libs/ch-uilib/rating/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/ch-uilib/rating/**/*.ts",
+          "libs/ch-uilib/rating/**/*.html"
+        ]
+      }
+    },
+    "storybook-mark": {
+      "executor": "nx:noop",
+      "options": {}
+    }
+  },
+  "tags": []
+}

@@ -3,6 +3,8 @@
   "version": 2,
   "projects": {
     "ch-uilib-button-new": "libs/ch-uilib/button-new",
+    "ch-uilib-rating": "libs/ch-uilib/rating",
+    "ch-uilib-star": "libs/ch-uilib/star",
     "ch-uilib-text-block": "libs/ch-uilib/text-block",
     "olchromatic": "apps/olchromatic",
     "olchromatic-e2e": "apps/olchromatic-e2e",

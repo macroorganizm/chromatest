@@ -1,0 +1,29 @@
+{
+  "projectType": "library",
+  "sourceRoot": "libs/ch-uilib/star/src",
+  "prefix": "olchromatic",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/ch-uilib/star"],
+      "options": {
+        "jestConfig": "libs/ch-uilib/star/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/ch-uilib/star/**/*.ts",
+          "libs/ch-uilib/star/**/*.html"
+        ]
+      }
+    },
+    "storybook-mark": {
+      "executor": "nx:noop",
+      "options": {}
+    }
+  },
+  "tags": []
+}

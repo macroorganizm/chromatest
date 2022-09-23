@@ -18,6 +18,8 @@
       "@olchromatic/ch-uilib/button-new": [
         "libs/ch-uilib/button-new/src/index.ts"
       ],
+      "@olchromatic/ch-uilib/rating": ["libs/ch-uilib/rating/src/index.ts"],
+      "@olchromatic/ch-uilib/star": ["libs/ch-uilib/star/src/index.ts"],
       "@olchromatic/ch-uilib/text-block": [
         "libs/ch-uilib/text-block/src/index.ts"
       ],
