@@ -10,7 +10,7 @@ env:
   CACHE_NODE_MODULES_PATH: |
     ~/.npm
     node_modules
-
+  BASE_REF: ${{ github.event_name == 'pull_request' && format('remotes/origin/{0}', github.base_ref) || 'HEAD~1' }}
   RUN_UNIQUE_ID: ${{ github.run_id }}-${{ github.run_attempt }}
 jobs:
   install:
@@ -19,6 +19,8 @@ jobs:
       storybooks-related-lib-changed: ${{ steps.storybooks-related-lib-changed.outputs.storybooks-related-lib-changed }}
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v3
         with:
           node-version: '14.18.1'
@@ -31,7 +33,7 @@ jobs:
         run: npm ci
       - name: Check changes "storybook-covered"
         id: storybooks-related-lib-changed
-        run: echo "::set-output name=storybooks-related-lib-changed::$(node scripts/ci-is-affected.mjs --base=main --head=HEAD --target=storybook-mark)"
+        run: echo "::set-output name=storybooks-related-lib-changed::$(node scripts/ci-is-affected.mjs --base=${{ env.BASE_REF}} --head=HEAD --target=storybook-mark)"
 
 #  test:
 #    needs: install
