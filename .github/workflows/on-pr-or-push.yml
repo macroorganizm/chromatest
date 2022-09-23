@@ -87,13 +87,12 @@ jobs:
 
   check-chromatic-pr:
     needs: install
-    if: github.ref != 'refs/heads/main' && ${{ needs.install.outputs.storybooks-related-lib-changed == 'true' }}
+    if: ${{ needs.install.outputs.storybooks-related-lib-changed == 'true' && github.ref != 'refs/heads/main'}}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0 # Required to retrieve git history
-
       - uses: actions/cache@v3
         with:
           path: ${{ env.CACHE_NODE_MODULES_PATH }}
@@ -111,7 +110,7 @@ jobs:
 
   accept-chromatic-baseline:
     needs: install
-    if: github.ref == 'refs/heads/main' && ${{ needs.install.outputs.storybooks-related-lib-changed == 'true' }}
+    if: ${{ needs.install.outputs.storybooks-related-lib-changed == 'true' && github.ref == 'refs/heads/main'}}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
