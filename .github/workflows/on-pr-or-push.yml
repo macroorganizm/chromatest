@@ -85,9 +85,9 @@ jobs:
 #          path: dist/storybook/ui
 #          retention-days: 1
 
-  check-chromatic:
+  check-chromatic-pr:
     needs: install
-    if: ${{ needs.install.outputs.storybooks-related-lib-changed == 'true' }}
+    if: github.ref != 'refs/heads/main' && ${{ needs.install.outputs.storybooks-related-lib-changed == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -104,11 +104,26 @@ jobs:
       - run: npm run build-storybook
 
       - uses: chromaui/action@v1
-        if: github.ref != 'refs/heads/main'
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           exitZeroOnChanges: true # Option to prevent the workflow from failing and request changes reviews
           storybookBuildDir: dist/storybook/ui
+
+  accept-chromatic-baseline:
+    needs: install
+    if: github.ref == 'refs/heads/main' && ${{ needs.install.outputs.storybooks-related-lib-changed == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Required to retrieve git history
+
+      - uses: actions/cache@v3
+        with:
+          path: ${{ env.CACHE_NODE_MODULES_PATH }}
+          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+
+      - run: npm run build-storybook
 
       - uses: chromaui/action@v1
         if: github.ref == 'refs/heads/main'
