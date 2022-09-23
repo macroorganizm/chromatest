@@ -5,7 +5,7 @@ module.exports = {
 
   core: { ...rootMain.core, builder: 'webpack5' },
 
-  stories: ['../../../**/*.stories.ts'],
+  stories: ['../../../libs/ch-uilib/button-new/**/*.stories.ts'],
   addons: [...rootMain.addons],
   webpackFinal: async (config, { configType }) => {
     // apply any global webpack configs that might have been specified in .storybook/main.js
