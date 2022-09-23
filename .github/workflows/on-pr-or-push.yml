@@ -99,6 +99,8 @@ jobs:
           path: ${{ env.CACHE_NODE_MODULES_PATH }}
           key: node_modules-${{ hashFiles('**/package-lock.json') }}
 
+      - run: npm run patch-storybook-affected
+
       - run: npm run build-storybook
 
       - uses: chromaui/action@v1
