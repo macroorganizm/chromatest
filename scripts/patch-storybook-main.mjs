@@ -33,5 +33,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
   const patchedFile = mainTs.toString().replace("stories: ['../../../**/*.stories.ts']", `stories: [${storiesToInclude.join(', ')}]`);
 
+  console.log(patchedFile);
+
   fs.writeFileSync(mainTsPath, patchedFile);
 })();
