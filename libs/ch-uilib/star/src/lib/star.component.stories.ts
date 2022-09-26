@@ -17,5 +17,5 @@ const Template: Story<StarComponent> = (args: StarComponent) => ({
 
 export const Primary = Template.bind({});
 Primary.args = {
-  stars: [1, 2, 3],
+  stars: [1, 2, 3, 4, 5],
 };
