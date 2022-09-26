@@ -36,35 +36,35 @@ jobs:
         id: storybooks-related-lib-changed
         run: echo "::set-output name=storybooks-related-lib-changed::$(node scripts/ci-is-affected.mjs --base=${{ env.BASE_REF}} --head=HEAD --target=storybook-mark)"
 
-  test:
-    needs: install
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0 # Required to retrieve git history
-
-      - uses: actions/cache@v3
-        with:
-          path: ${{ env.CACHE_NODE_MODULES_PATH }}
-          key: node_modules-${{ hashFiles('**/package-lock.json') }}
-
-      - name: test
-        run: npm test
-
-  build:
-    needs: install
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: actions/cache@v3
-        with:
-          path: ${{ env.CACHE_NODE_MODULES_PATH }}
-          key: node_modules-${{ hashFiles('**/package-lock.json') }}
-
-      - name: build
-        run: npm run build
+#  test:
+#    needs: install
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#        with:
+#          fetch-depth: 0 # Required to retrieve git history
+#
+#      - uses: actions/cache@v3
+#        with:
+#          path: ${{ env.CACHE_NODE_MODULES_PATH }}
+#          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+#
+#      - name: test
+#        run: npm test
+#
+#  build:
+#    needs: install
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#
+#      - uses: actions/cache@v3
+#        with:
+#          path: ${{ env.CACHE_NODE_MODULES_PATH }}
+#          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+#
+#      - name: build
+#        run: npm run build
 
   check-storybook:
     needs: install
@@ -87,9 +87,9 @@ jobs:
 #          path: dist/storybook/ui
 #          retention-days: 1
 
-  check-chromatic-label:
+  check-chromatic-PR-label:
     needs: check-storybook
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'chromatic')}}
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'chromatic') && github.ref != 'refs/heads/main'}}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@v6
@@ -156,8 +156,8 @@ jobs:
 
 
   apply-chromatic:
-    needs: install
-    if: ${{ github.ref == 'refs/heads/main' && contains(github.event.pull_request.labels.*.name, 'chromatic')}}
+    needs: check-storybook
+    if: ${{ github.ref == 'refs/heads/main' && contains(github.event.push.labels.*.name, 'chromatic')}}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
