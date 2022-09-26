@@ -14,71 +14,72 @@ env:
   BASE_REF: ${{ github.event_name == 'pull_request' && format('remotes/origin/{0}', github.base_ref) || 'HEAD~1' }}
   RUN_UNIQUE_ID: ${{ github.run_id }}-${{ github.run_attempt }}
 jobs:
-#  install:
-#    runs-on: ubuntu-latest
-#    outputs:
-#      storybooks-related-lib-changed: ${{ steps.storybooks-related-lib-changed.outputs.storybooks-related-lib-changed }}
-#    steps:
-#      - uses: actions/checkout@v3
-#        with:
-#          fetch-depth: 0
-#      - uses: actions/setup-node@v3
-#        with:
-#          node-version: '14.18.1'
-#      - uses: actions/cache@v3
-#        id: cache
-#        with:
-#          path: ${{ env.CACHE_NODE_MODULES_PATH }}
-#          key: node_modules-${{ hashFiles('**/package-lock.json') }}
-#      - name: Install dependencies
-#        run: npm ci
-#      - name: Check changes "storybook-covered"
-#        id: storybooks-related-lib-changed
-#        run: echo "::set-output name=storybooks-related-lib-changed::$(node scripts/ci-is-affected.mjs --base=${{ env.BASE_REF}} --head=HEAD --target=storybook-mark)"
+  install:
+    runs-on: ubuntu-latest
+    outputs:
+      storybooks-related-lib-changed: ${{ steps.storybooks-related-lib-changed.outputs.storybooks-related-lib-changed }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '14.18.1'
+      - uses: actions/cache@v3
+        id: cache
+        with:
+          path: ${{ env.CACHE_NODE_MODULES_PATH }}
+          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        run: npm ci
+      - name: Check changes "storybook-covered"
+        id: storybooks-related-lib-changed
+        run: echo "::set-output name=storybooks-related-lib-changed::$(node scripts/ci-is-affected.mjs --base=${{ env.BASE_REF}} --head=HEAD --target=storybook-mark)"
 
-#  test:
-#    needs: install
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v3
-#        with:
-#          fetch-depth: 0 # Required to retrieve git history
-#
-#      - uses: actions/cache@v3
-#        with:
-#          path: ${{ env.CACHE_NODE_MODULES_PATH }}
-#          key: node_modules-${{ hashFiles('**/package-lock.json') }}
-#
-#      - name: test
-#        run: npm test
-#
-#  build:
-#    needs: install
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v3
-#
-#      - uses: actions/cache@v3
-#        with:
-#          path: ${{ env.CACHE_NODE_MODULES_PATH }}
-#          key: node_modules-${{ hashFiles('**/package-lock.json') }}
-#
-#      - name: build
-#        run: npm run build
+  test:
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Required to retrieve git history
 
-#  check-storybook:
-#    needs: install
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v3
-#
-#      - uses: actions/cache@v3
-#        with:
-#          path: ${{ env.CACHE_NODE_MODULES_PATH }}
-#          key: node_modules-${{ hashFiles('**/package-lock.json') }}
-#
-#      - name: check-storybook
-#        run: npm run build-storybook
+      - uses: actions/cache@v3
+        with:
+          path: ${{ env.CACHE_NODE_MODULES_PATH }}
+          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+
+      - name: test
+        run: npm test
+
+  build:
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/cache@v3
+        with:
+          path: ${{ env.CACHE_NODE_MODULES_PATH }}
+          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+
+      - name: build
+        run: npm run build
+
+  check-storybook:
+    needs: install
+    if: ${{ needs.install.outputs.storybooks-related-lib-changed == 'true'}}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/cache@v3
+        with:
+          path: ${{ env.CACHE_NODE_MODULES_PATH }}
+          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+
+      - name: check-storybook
+        run: npm run build-storybook
 #      - name: Cache storybook
 #        uses: actions/upload-artifact@v3
 #        with:
@@ -86,26 +87,8 @@ jobs:
 #          path: dist/storybook/ui
 #          retention-days: 1
 
-#  check-chromatic-pr:
-#    needs: install
-#    if: ${{ needs.install.outputs.storybooks-related-lib-changed == 'true' && github.ref != 'refs/heads/main'}}
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v3
-#        with:
-#          fetch-depth: 0 # Required to retrieve git history
-#      - uses: actions/cache@v3
-#        with:
-#          path: ${{ env.CACHE_NODE_MODULES_PATH }}
-#          key: node_modules-${{ hashFiles('**/package-lock.json') }}
-#
-##      - run: node scripts/patch-storybook-main.mjs --base=${{env.BASE_REF}} --head=HEAD
-#
-#      - run: npm run build-storybook
-#
-#      - run: npx chromatic --project-token=${{ secrets.CHROMATIC_PROJECT_TOKEN }} --exit-zero-on-changes  --storybook-build-dir=dist/storybook/ui
-
-  comment:
+  check-chromatic-label:
+    needs: check-storybook
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'chromatic')}}
     runs-on: ubuntu-latest
     steps:
@@ -116,16 +99,50 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '⚠️ Thanks for reporting! 1'
+              body: '⚠️ This PR potentially has changes covered by storybook. Set a `chromatic` label to verify them'
             })
 
-  check-1:
+
+  check-chromatic-pr:
+    needs: check-storybook
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'chromatic') && github.ref != 'refs/heads/main'}}
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - run: echo ${{github.event.pull_request.labels}}
-    - name: Try to fail
-      run: exit 1
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Required to retrieve git history
+      - uses: actions/cache@v3
+        with:
+          path: ${{ env.CACHE_NODE_MODULES_PATH }}
+          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+
+#      - run: node scripts/patch-storybook-main.mjs --base=${{env.BASE_REF}} --head=HEAD
+
+      - run: npm run build-storybook
+
+      - run: npx chromatic --project-token=${{ secrets.CHROMATIC_PROJECT_TOKEN }} --exit-zero-on-changes  --storybook-build-dir=dist/storybook/ui
+
+#  comment:
+#    if: ${{ !contains(github.event.pull_request.labels.*.name, 'chromatic') }}
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/github-script@v6
+#        with:
+#          script: |
+#            github.rest.issues.createComment({
+#              issue_number: context.issue.number,
+#              owner: context.repo.owner,
+#              repo: context.repo.repo,
+#              body: '⚠️ Thanks for reporting! 1'
+#            })
+
+#  check-1:
+#    runs-on: ubuntu-latest
+#    steps:
+#    - uses: actions/checkout@v3
+#    - run: echo ${{github.event.pull_request.labels}}
+#    - name: Try to fail
+#      run: exit 1
 #
 #  check-2:
 #    needs: install
@@ -138,24 +155,24 @@ jobs:
 #            run: echo Should not get here
 
 
-#  apply-chromatic:
-#    needs: install
-#    if: ${{ needs.install.outputs.storybooks-related-lib-changed == 'true' && github.ref == 'refs/heads/main'}}
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v3
-#        with:
-#          fetch-depth: 0 # Required to retrieve git history
-#      - uses: actions/cache@v3
-#        with:
-#          path: ${{ env.CACHE_NODE_MODULES_PATH }}
-#          key: node_modules-${{ hashFiles('**/package-lock.json') }}
-#
-#      #      - run: node scripts/patch-storybook-main.mjs --base=${{env.BASE_REF}} --head=HEAD
-#
-#      - run: npm run build-storybook
-#
-#      - run: npx chromatic --project-token=${{ secrets.CHROMATIC_PROJECT_TOKEN }} --auto-accept-changes  --storybook-build-dir=dist/storybook/ui
+  apply-chromatic:
+    needs: install
+    if: ${{ github.ref == 'refs/heads/main' && contains(github.event.pull_request.labels.*.name, 'chromatic')}}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Required to retrieve git history
+      - uses: actions/cache@v3
+        with:
+          path: ${{ env.CACHE_NODE_MODULES_PATH }}
+          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+
+      #      - run: node scripts/patch-storybook-main.mjs --base=${{env.BASE_REF}} --head=HEAD
+
+      - run: npm run build-storybook
+
+      - run: npx chromatic --project-token=${{ secrets.CHROMATIC_PROJECT_TOKEN }} --auto-accept-changes  --storybook-build-dir=dist/storybook/ui
 
 #      - uses: chromaui/action@v1
 #        with:
