@@ -14,28 +14,6 @@ env:
   BASE_REF: ${{ github.event_name == 'pull_request' && format('remotes/origin/{0}', github.base_ref) || 'HEAD~1' }}
   RUN_UNIQUE_ID: ${{ github.run_id }}-${{ github.run_attempt }}
 jobs:
-#  install:
-#    runs-on: ubuntu-latest
-#    outputs:
-#      storybooks-related-lib-changed: ${{ steps.storybooks-related-lib-changed.outputs.storybooks-related-lib-changed }}
-#    steps:
-#      - uses: actions/checkout@v3
-#        with:
-#          fetch-depth: 0
-#      - uses: actions/setup-node@v3
-#        with:
-#          node-version: '14.18.1'
-#      - uses: actions/cache@v3
-#        id: cache
-#        with:
-#          path: ${{ env.CACHE_NODE_MODULES_PATH }}
-#          key: node_modules-${{ hashFiles('**/package-lock.json') }}
-#      - name: Install dependencies
-#        run: npm ci
-#      - name: Check changes "storybook-covered"
-#        id: storybooks-related-lib-changed
-#        run: echo "::set-output name=storybooks-related-lib-changed::$(node scripts/ci-is-affected.mjs --base=${{ env.BASE_REF}} --head=HEAD --target=storybook-mark)"
-
   install:
     runs-on: ubuntu-latest
     outputs:
@@ -43,13 +21,17 @@ jobs:
       pr-has-chromatic-label: ${{ steps.pr-has-chromatic-label.outputs.pr-has-chromatic-label }}
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '14.18.1'
       - uses: actions/cache@v3
         id: cache
         with:
           path: ${{ env.CACHE_NODE_MODULES_PATH }}
           key: node_modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
       - name: Check changes "storybook-covered"
         id: storybooks-related-lib-changed
@@ -63,6 +45,34 @@ jobs:
       - name: Check is PR had the "chromatic" label
         id: pr-has-chromatic-label
         run: echo "::set-output name=pr-has-chromatic-label::${{ steps.check_pr_labels.outputs.result }}"
+
+#  install:
+#    runs-on: ubuntu-latest
+#    outputs:
+#      storybooks-related-lib-changed: ${{ steps.storybooks-related-lib-changed.outputs.storybooks-related-lib-changed }}
+#      pr-has-chromatic-label: ${{ steps.pr-has-chromatic-label.outputs.pr-has-chromatic-label }}
+#    steps:
+#      - uses: actions/checkout@v3
+#      - uses: actions/cache@v3
+#        id: cache
+#        with:
+#          path: ${{ env.CACHE_NODE_MODULES_PATH }}
+#          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+#      - name: Install dependencies
+#        if: steps.cache.outputs.cache-hit != 'true'
+#        run: npm ci
+#      - name: Check changes "storybook-covered"
+#        id: storybooks-related-lib-changed
+#        run: echo "::set-output name=storybooks-related-lib-changed::$(node scripts/ci-is-affected.mjs --base=${{ env.BASE_REF}} --head=HEAD --target=storybook-mark)"
+#      - name: Check PR labels action step
+#        id: check_pr_labels
+#        uses: shioyang/check-pr-labels-on-push-action@v1.0.6
+#        with:
+#          github-token: ${{ secrets.GITHUB_TOKEN }}
+#          labels: '["chromatic"]'
+#      - name: Check is PR had the "chromatic" label
+#        id: pr-has-chromatic-label
+#        run: echo "::set-output name=pr-has-chromatic-label::${{ steps.check_pr_labels.outputs.result }}"
 
 
 
