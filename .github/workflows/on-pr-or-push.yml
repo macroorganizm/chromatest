@@ -13,27 +13,27 @@ env:
   BASE_REF: ${{ github.event_name == 'pull_request' && format('remotes/origin/{0}', github.base_ref) || 'HEAD~1' }}
   RUN_UNIQUE_ID: ${{ github.run_id }}-${{ github.run_attempt }}
 jobs:
-  install:
-    runs-on: ubuntu-latest
-    outputs:
-      storybooks-related-lib-changed: ${{ steps.storybooks-related-lib-changed.outputs.storybooks-related-lib-changed }}
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '14.18.1'
-      - uses: actions/cache@v3
-        id: cache
-        with:
-          path: ${{ env.CACHE_NODE_MODULES_PATH }}
-          key: node_modules-${{ hashFiles('**/package-lock.json') }}
-      - name: Install dependencies
-        run: npm ci
-      - name: Check changes "storybook-covered"
-        id: storybooks-related-lib-changed
-        run: echo "::set-output name=storybooks-related-lib-changed::$(node scripts/ci-is-affected.mjs --base=${{ env.BASE_REF}} --head=HEAD --target=storybook-mark)"
+#  install:
+#    runs-on: ubuntu-latest
+#    outputs:
+#      storybooks-related-lib-changed: ${{ steps.storybooks-related-lib-changed.outputs.storybooks-related-lib-changed }}
+#    steps:
+#      - uses: actions/checkout@v3
+#        with:
+#          fetch-depth: 0
+#      - uses: actions/setup-node@v3
+#        with:
+#          node-version: '14.18.1'
+#      - uses: actions/cache@v3
+#        id: cache
+#        with:
+#          path: ${{ env.CACHE_NODE_MODULES_PATH }}
+#          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+#      - name: Install dependencies
+#        run: npm ci
+#      - name: Check changes "storybook-covered"
+#        id: storybooks-related-lib-changed
+#        run: echo "::set-output name=storybooks-related-lib-changed::$(node scripts/ci-is-affected.mjs --base=${{ env.BASE_REF}} --head=HEAD --target=storybook-mark)"
 
 #  test:
 #    needs: install
@@ -118,23 +118,21 @@ jobs:
               body: '⚠️ Thanks for reporting!'
             })
 
-  check-1:
-    needs: install
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - name: Try to fail
-      run: exit 1
-
-  check-2:
-    needs: install
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Try to OK
-        run: exit 0
-#          - name: Print message if we don't fail
-#            run: echo Should not get here
+#  check-1:
+#    needs: install
+#    runs-on: ubuntu-latest
+#    steps:
+#    - uses: actions/checkout@v3
+#    - name: Try to fail
+#      run: exit 1
+#
+#  check-2:
+#    needs: install
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Try to OK
+#        run: exit 0
 
 
 #  apply-chromatic:
