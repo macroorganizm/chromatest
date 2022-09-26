@@ -118,15 +118,13 @@ jobs:
               body: '⚠️ Thanks for reporting! 1'
             })
 
-      - run: echo ${{github.event.pull_request.labels}}
-
-#  check-1:
-#    needs: install
-#    runs-on: ubuntu-latest
-#    steps:
-#    - uses: actions/checkout@v3
-#    - name: Try to fail
-#      run: exit 1
+  check-1:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - run: echo ${{github.event.pull_request.labels}}
+    - name: Try to fail
+      run: exit 1
 #
 #  check-2:
 #    needs: install
