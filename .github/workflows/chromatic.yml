@@ -32,7 +32,11 @@ jobs:
           path: ${{ env.CACHE_NODE_MODULES_PATH }}
           key: node_modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
+      - name: FROM CACHE
+        if: steps.cache.outputs.cache-hit == 'true'
+        run: echo 'DEPS FROM A CACHE'
       - name: Check changes "storybook-covered"
         id: storybooks-related-lib-changed
         run: echo "::set-output name=storybooks-related-lib-changed::$(node scripts/ci-is-affected.mjs --base=${{ env.BASE_REF}} --head=HEAD --target=storybook-mark)"
