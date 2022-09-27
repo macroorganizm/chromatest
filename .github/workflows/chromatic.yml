@@ -104,7 +104,7 @@ jobs:
 
   check-chromatic-PR-label:
     needs: chromatic-prepare
-    if: !contains(github.event.pull_request.labels.*.name, 'chromatic' )
+    if: ${{ contains(github.event.pull_request.labels.*.name, $env.CHROMATIC_LABEL) }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@v6
