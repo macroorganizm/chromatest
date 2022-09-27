@@ -20,6 +20,11 @@ jobs:
       storybooks-related-lib-changed: ${{ steps.storybooks-related-lib-changed.outputs.storybooks-related-lib-changed }}
       pr-has-chromatic-label: ${{ steps.pr-has-chromatic-label.outputs.pr-has-chromatic-label }}
     steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.9.0
+        if: github.event_name == 'pull_request'
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
