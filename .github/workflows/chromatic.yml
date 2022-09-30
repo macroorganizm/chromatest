@@ -140,7 +140,7 @@ jobs:
 
       - run: npm run build-storybook
 
-      - run: npx chromatic --project-token=${{ secrets.CHROMATIC_PROJECT_TOKEN }} --exit-zero-on-changes  --storybook-build-dir=dist/storybook/ui --only-story-names "ButtonComponent/**"
+      - run: npx chromatic --project-token=${{ secrets.CHROMATIC_PROJECT_TOKEN }} --exit-zero-on-changes  --storybook-build-dir=dist/storybook/ui
 
   apply-chromatic:
     needs: [chromatic-prepare, check-storybook]
