@@ -140,7 +140,7 @@ jobs:
 
       - run: npm run build-storybook
 
-      - run: npx chromatic --project-token=${{ secrets.CHROMATIC_PROJECT_TOKEN }} --exit-zero-on-changes  --storybook-build-dir=dist/storybook/ui --only-story-files="libs/ch-uilib/text-block/**/*.stories.ts"
+      - run: npx chromatic --project-token=${{ secrets.CHROMATIC_PROJECT_TOKEN }} --exit-zero-on-changes  --storybook-build-dir=dist/storybook/ui --only-story-files="libs/ch-uilib/rating/**/*.stories.ts"
 
   apply-chromatic:
     needs: [chromatic-prepare, check-storybook]
